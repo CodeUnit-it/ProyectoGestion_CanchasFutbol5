@@ -1,0 +1,72 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Registro</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Nombre -->
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input id="name" formControlName="name" placeholder="Tu nombre" />
+        <div *ngIf="registerForm.get('name')?.invalid && registerForm.get('name')?.touched" class="error">
+          Nombre requerido
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input id="email" formControlName="email" placeholder="ejemplo@correo.com" />
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+          Email inválido
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Telefono</label>
+        <input id="telefono" formControlName="telefono" placeholder="1543459876" />
+        <div *ngIf="registerForm.get('telefono')?.invalid && registerForm.get('telefono')?.touched" class="error">
+          Telefono requerido
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" formControlName="password" placeholder="******" />
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+          La contraseña debe tener al menos 6 caracteres
+        </div>
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div class="form-group">
+        <label for="password_confirmation">Confirmar Contraseña</label>
+        <input id="password_confirmation" type="password" formControlName="password_confirmation" placeholder="******" />
+        <div *ngIf="registerForm.get('password_confirmation')?.invalid && registerForm.get('password_confirmation')?.touched" class="error">
+          La confirmación debe coincidir con la contraseña
+        </div>
+      </div>
+
+      <!-- Rol -->
+      <div *ngIf="isMaster" class="form-group">
+        <label for="role">Rol</label>
+        <select id="role" formControlName="role">
+          <option value="usuario">Usuario</option>
+          <option value="administrador">Administrador</option>
+        </select>
+      </div>
+
+      <!-- Error del backend -->
+      <div *ngIf="errorMessage" class="error-backend">{{ errorMessage }}</div>
+
+      <button type="submit" [disabled]="registerForm.invalid || cargando">
+        {{ cargando ? 'Registrando...' : 'Registrarse' }}
+      </button>
+
+    </form>
+
+    <div class="footer">
+      <small>Ya tenés cuenta? <a [routerLink]="['/login']">Ingresá</a></small>
+    </div>
+  </div>
+</div>

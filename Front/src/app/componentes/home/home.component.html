@@ -1,0 +1,61 @@
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+
+<div class="home-container">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">SomosFutbol</div>
+    <div class="navbar-links">
+      <ng-container *ngIf="!isLoggedIn">
+        <button class="btn login fw-bold" [routerLink]="['/login']">Login</button>
+        <button class="btn register fw-bold" [routerLink]="['/register']">
+          Registro
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="isLoggedIn">
+        <button *ngIf="isUser" class="btn profile fw-bold" routerLink="perfil">
+          Perfil
+        </button>
+        <button class="btn logout fw-bold" (click)="logout()">Logout</button>
+      </ng-container>
+    </div>
+  </nav>
+
+  <!-- Sidebar + Content -->
+  <div class="main">
+    <aside class="sidebar">
+      <ul>
+        <li>
+          <a *ngIf="!isLoggedIn || isUser || isMaster" routerLink="inicio"
+            >Inicio</a
+          >
+        </li>
+        <li>
+          <a *ngIf="isAdmin || isMaster" routerLink="dashboard">Dashboard</a>
+        </li>
+        <li><a routerLink="canchas">Canchas</a></li>
+        <li>
+          <a *ngIf="isAdmin || isUser || isMaster" routerLink="reservas"
+            >Reservas</a
+          >
+        </li>
+        <li><a *ngIf="isAdmin || isMaster" routerLink="usuarios">Usuarios</a></li>
+        <button
+          *ngIf="isMaster"
+          class="btn btn-primary mb-3"
+          [routerLink]="['/register']"
+        >
+          Registro
+        </button>
+      </ul>
+    </aside>
+
+    <div class="content">
+      <!-- Aquí se renderizan los componentes hijos -->
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

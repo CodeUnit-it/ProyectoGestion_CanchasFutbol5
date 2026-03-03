@@ -1,0 +1,71 @@
+
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #0d1b2a, #1b263b);
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+}
+
+.logo {
+  width: 300px;
+  max-width: 40%;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.btn.entrar {
+  display: inline-block;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  background: #1db954;
+  border: none;          /* elimina borde */
+  outline: none;         /* elimina contorno */
+  border-radius: 30px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn.entrar:hover {
+  background: #17a44a;
+}
+
+.btn.entrar:focus,
+.btn.entrar:active {
+  outline: none;   /* asegura que no aparezca contorno */
+  box-shadow: none;
+}
+
+/* 📱 Responsivo */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .btn.entrar {
+    width: 80%;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 90px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+}

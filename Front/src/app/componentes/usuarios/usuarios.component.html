@@ -1,0 +1,102 @@
+<div class="usuarios-container">
+  <h2 class="mb-4 text-center">👥 Usuarios Registrados</h2>
+
+  <div *ngIf="mensaje" class="alert alert-success text-center">
+  {{ mensaje }}
+</div>
+
+<div *ngIf="usuarioEditando" class="card p-3 mb-3">
+  <h4>Editar usuario {{ usuarioEditando.name }}</h4>
+  <form [formGroup]="usuarioForm" (ngSubmit)="guardarCambios()">
+    <!-- Campos name, email, telefono, role, password -->
+    <input formControlName="name" placeholder="Nombre" class="form-control mb-2" />
+    <input formControlName="email" placeholder="Email" class="form-control mb-2" />
+    <input formControlName="telefono" placeholder="Teléfono" class="form-control mb-2" />
+    <select formControlName="role" class="form-select mb-2">
+      <option value="usuario">Usuario</option>
+      <option value="administrador">Administrador</option>
+      <option value="master">Master</option>
+    </select>
+    <!-- <input formControlName="password" type="password" placeholder="Nueva contraseña (opcional)" class="form-control mb-2" /> -->
+    <button class="btn btn-success me-2" type="submit">Guardar cambios</button>
+    <button class="btn btn-secondary" type="button" (click)="usuarioEditando = null">Cancelar</button>
+  </form>
+</div>
+
+
+
+  <!-- 🔹 Estado de carga -->
+  <div *ngIf="cargando" class="cargando">Cargando usuarios...</div>
+
+  <!-- 🔹 Mensaje de error -->
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <!-- 🔹 Tabla de usuarios (solo si hay resultados) -->
+  <table
+    *ngIf="!cargando && usuarios.length > 0 && esAdmin"
+    class="tabla-usuarios"
+  >
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Teléfono</th>
+        <th>Fecha Registro</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    
+    <tbody>
+      <tr *ngFor="let u of usuarios">
+        <td>{{ u.id }}</td>
+        <td>{{ u.name }}</td>
+        <td>{{ u.email }}</td>
+        <td>
+          <span
+            [class.admin]="u.role === 'administrador'"
+            [class.usuario]="u.role === 'usuario'"
+          >
+            {{ u.role }}
+          </span>
+        </td>
+        <td>{{ u.telefono || "—" }}</td>
+        <td>{{ u.created_at | date : "dd/MM/yyyy HH:mm" }}</td>
+        <td>
+          <div>
+
+      <button (click)="editarUsuario(u)" 
+        [disabled]="u.role === 'master' && usuario.role !== 'master' || u.id === usuario.id"
+        class="btn btn-sm btn-primary me-1"
+      >
+        Editar
+      </button>
+
+      <button 
+        class="btn btn-sm btn-danger" 
+        (click)="borrarUsuario(u.id)"
+        [disabled]="u.role === 'master' || u.id === usuario.id"
+        title="Eliminar usuario"
+      >
+        Eliminar
+      </button>
+    </div>
+
+    </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+  <!-- 🔹 Sin usuarios -->
+  <p *ngIf="!cargando && usuarios.length === 0 && esAdmin " class="vacio">
+    No hay usuarios registrados.
+  </p>
+
+  <!-- 🔹 Botón de logout -->
+  <div class="text-center">
+    <button (click)="cerrarSesion()" class="btn-cerrar">Cerrar sesión</button>
+  </div>
+</div>

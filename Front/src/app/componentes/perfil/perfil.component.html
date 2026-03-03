@@ -1,0 +1,99 @@
+<div class="perfil-reservas-wrapper">
+  <div class="perfil-section">
+    <div *ngIf="mensaje" class="alert alert-success text-center">
+      {{ mensaje }}
+    </div>
+
+    <div class="perfil-container" *ngIf="usuario; else sinUsuario">
+      <div class="perfil-card">
+        <div class="perfil-header">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
+            alt="Foto de perfil"
+            class="perfil-foto"
+          />
+          <h2>{{ usuario.name }}</h2>
+          <p class="email">{{ usuario.email }}</p>
+          <p *ngIf="esAdmin" class="rol">
+            Rol: <strong>{{ usuario.role }}</strong>
+          </p>
+        </div>
+        <div class="perfil-detalles">
+          <p class="telefono-row">
+            <span>Teléfono:</span>
+            <ng-container *ngIf="editandoTelefono; else soloVistaTelefono">
+              <input
+                [(ngModel)]="usuario.telefono"
+                type="text"
+                class="telefono-input"
+              />
+            </ng-container>
+            <ng-template #soloVistaTelefono>
+              {{ usuario.telefono || "No informado" }}
+              <button (click)="editarTelefono()" class="btn-editar">Editar</button>
+            </ng-template>
+          </p>
+          <div *ngIf="editandoTelefono" class="boton-row">
+            <button (click)="guardarTelefono()" class="btn-guardar">Guardar</button>
+            <button (click)="cancelarEdicion()" class="btn-cancelar">Cancelar</button>
+          </div>
+
+          <p>
+            <span>Registrado el:</span>
+            {{ usuario.created_at | date : "dd/MM/yyyy HH:mm" }}
+          </p>
+        </div>
+
+        <div class="perfil-acciones">
+          <button class="btn-cerrar" (click)="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #sinUsuario>
+      <div class="perfil-vacio">
+        <p>No hay información del usuario disponible.</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="reservas-section">
+    <div class="reservas-scroll">
+      <h3>Mis Reservas</h3>
+      <table class="table table-sm table-bordered" *ngIf="reservasUsuario.length > 0">
+        <thead>
+          <tr>
+            <th>Cancha</th>
+            <th>Fecha</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reserva of reservasUsuario">
+            <td>{{ reserva.cancha.id }}</td>
+            <td>{{ reserva.fecha | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ reserva.hora_inicio }}</td>
+            <td>{{ reserva.hora_fin }}</td>
+            <td>
+              <span 
+                class="badge"
+                [ngClass]="{
+                  'bg-success': reserva.estado === 'aprobada' || reserva.estado === 'activa',
+                  'bg-warning text-dark': reserva.estado === 'pendiente',
+                  'bg-danger': reserva.estado === 'cancelada'
+                }"
+              >
+                {{ reserva.estado }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="reservasUsuario.length === 0" class="alert alert-info">
+        No tienes reservas registradas.
+      </div>
+    </div>
+  </div>
+</div>

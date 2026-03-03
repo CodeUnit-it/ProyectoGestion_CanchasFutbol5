@@ -1,0 +1,182 @@
+/* Contenedor principal */
+.reserva-container {
+  width: 350px;
+  margin:  auto;
+  padding: 4px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', sans-serif;
+  
+}
+.container{
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+
+.card {
+    max-width: 900px; 
+    max-height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Título */
+.reserva-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #007bff;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+/* Alertas */
+.alert-success, .alert-danger {
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* Lista de errores */
+.alert-danger ul {
+  padding-left: 18px;
+  margin: 0;
+}
+.alert-danger li {
+  margin-bottom: 3px;
+}
+
+/* Formulario */
+.form-group {
+  margin-bottom: 12px;
+}
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  font-size: 13px;
+  display: block;
+}
+.form-control {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  padding: 4px 10px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 1.5px rgba(0,123,255,0.2);
+  outline: none;
+}
+
+.btn-confirmar {
+  background-color: green;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-confirmar:disabled {
+  background-color: green;
+  cursor: not-allowed;
+}
+
+
+
+/* Centrado del botón */
+.text-center {
+  text-align: center;
+}
+
+.calendar-container {
+  background: #fff;
+  padding: 8px;
+  max-width: 500px; /* 👈 reduce el ancho total */
+  margin: 0 auto;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 5px; 
+  font-size: 0.85rem; 
+  border-radius: 5px;
+  cursor: pointer;
+  min-height: 28px; 
+}
+.calendar-day.header {
+  font-weight: 600;
+  background-color: #f5f5f5;
+  font-size: 0.8rem;
+}
+
+.calendar-day.libre {
+  background-color: #8ef1a7; 
+}
+
+.calendar-day.ocupado {
+  background-color: #d40718; 
+}
+
+.calendar-day.parcial {
+  background-color: #e45a1a; 
+}
+
+.calendar-day.disabled {
+  background-color: #eee;
+  cursor: default;
+  color: #aaa;
+}
+
+.calendar-day.seleccionado {
+  border: 3px solid #007bff;
+  background-color: #dbeafe; 
+  font-weight: bold;
+}
+
+
+/* Responsive para móviles */
+@media (max-width: 480px) {
+  .reserva-container {
+    width: 100%;
+    padding: 15px;
+  }
+}
+
+
+
+.leyenda-calendario {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  font-size: 0.97rem;
+  margin-bottom: 6px;
+}
+
+.leyenda-box {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  vertical-align: middle;
+}
+
+/* Usa tus mismos colores del calendario para consistencia */
+.leyenda-box.libre     { background: #7fe498; border-color: #219150; }
+.leyenda-box.ocupado   { background:#d40718; border-color: #c0392b; }
+.leyenda-box.parcial   { background: #e45a1a; border-color: #e67e22; }
+  

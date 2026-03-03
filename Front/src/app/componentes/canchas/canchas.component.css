@@ -1,0 +1,152 @@
+/* --- Contenedor principal --- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- Encabezado --- */
+h2 {
+  color: #1e3a8a; /* Azul oscuro */
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* --- Formulario --- */
+.card {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+form .form-label {
+  font-weight: 500;
+  color: #333;
+}
+
+form .form-control {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+form .form-control:focus {
+  border-color: #1e3a8a;
+  box-shadow: 0 0 5px rgba(30, 58, 138, 0.3);
+}
+
+/* --- Botones --- */
+.btn-primary {
+  background-color: #1e3a8a;
+  border-color: #1e3a8a;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+}
+
+.btn-warning {
+  background-color: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.btn-warning:hover {
+  background-color: #d97706;
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  border-color: #ef4444;
+}
+
+.btn-danger:hover {
+  background-color: #b91c1c;
+  transform: translateY(-2px);
+}
+
+/* --- Tabla --- */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin-top: 10px;
+}
+
+thead {
+  background-color: #1e3a8a;
+  color: #fff;
+}
+
+thead th {
+  padding: 12px;
+  text-align: left;
+}
+
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f3f4f6;
+}
+
+/* --- Mensajes --- */
+.alert-info {
+  text-align: center;
+  font-weight: 500;
+}
+
+.alert-danger {
+  font-weight: 500;
+}
+
+/* --- Responsive --- */
+@media (max-width: 992px) {
+  .row.g-3 {
+    flex-direction: column;
+  }
+  .col-md-3, .col-md-2 {
+    width: 100% !important;
+  }
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead {
+    display: none;
+  }
+  tbody tr {
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    padding: 12px;
+  }
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: none;
+  }
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+  }
+}

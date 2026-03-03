@@ -1,0 +1,1024 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API en Laravel",
+        "description": "Documentación de la API con Swagger en Laravel",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Servidor local"
+        }
+    ],
+    "paths": {
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Registrar nuevo usuario",
+                "operationId": "8a56853624e025573120a09a4c75d468",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "juan@example.com"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "usuario",
+                                            "administrador",
+                                            "master"
+                                        ],
+                                        "example": "usuario"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario registrado correctamente"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Autenticación"
+                ],
+                "summary": "Iniciar sesión",
+                "operationId": "8dcb70df1020986038d098cc08d05dae",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "juan@example.com"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login exitoso"
+                    },
+                    "401": {
+                        "description": "Credenciales inválidas"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/canchas2": {
+            "get": {
+                "tags": [
+                    "Canchas"
+                ],
+                "summary": "Obtener todas las canchas",
+                "operationId": "48d206ad7daadcff95ae95b55a8a2acd",
+                "responses": {
+                    "200": {
+                        "description": "Lista de canchas"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Canchas"
+                ],
+                "summary": "Crear una nueva cancha (Solo ADMIN)",
+                "operationId": "3963bbbd4a28f4dfbbfcd03f3963dad8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre",
+                                    "tipo"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Cancha 1"
+                                    },
+                                    "tipo": {
+                                        "type": "string",
+                                        "example": "Fútbol 5"
+                                    },
+                                    "precio_hora": {
+                                        "type": "number",
+                                        "example": 1200
+                                    },
+                                    "cant_jugadores": {
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cancha creada correctamente"
+                    },
+                    "401": {
+                        "description": "No autenticado (Falta Token)"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Falta Rol)"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/canchas2/{id}": {
+            "get": {
+                "tags": [
+                    "Canchas"
+                ],
+                "summary": "Obtener una cancha por ID",
+                "operationId": "78f77dde1f489a905240d45a50078de6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Datos de la cancha"
+                    },
+                    "404": {
+                        "description": "Cancha no encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Canchas"
+                ],
+                "summary": "Actualizar una cancha existente (Solo ADMIN)",
+                "operationId": "fa1ab91a1ad1b1ba2b7498c09e41e902",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Cancha 1"
+                                    },
+                                    "tipo": {
+                                        "type": "string",
+                                        "example": "Fútbol 7"
+                                    },
+                                    "precio_hora": {
+                                        "type": "number",
+                                        "example": 1500
+                                    },
+                                    "cant_jugadores": {
+                                        "type": "integer",
+                                        "example": 14
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cancha actualizada correctamente"
+                    },
+                    "401": {
+                        "description": "No autenticado (Falta Token)"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Falta Rol)"
+                    },
+                    "404": {
+                        "description": "Cancha no encontrada"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Canchas"
+                ],
+                "summary": "Eliminar una cancha (Solo ADMIN)",
+                "operationId": "ef98a39ac76a0a209090fd0b5f6ee787",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cancha eliminada correctamente"
+                    },
+                    "401": {
+                        "description": "No autenticado (Falta Token)"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Falta Rol)"
+                    },
+                    "404": {
+                        "description": "Cancha no encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservas": {
+            "get": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Listar todas las reservas (Administrador)",
+                "description": "Listar todas las reservas (Solo ADMIN)",
+                "operationId": "8536ca90a9f5ba3709643c0493395478",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "estado",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de reservas"
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Crear una nueva reserva",
+                "operationId": "3b0d25aeb18200cc0887c6cb9d929934",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cliente",
+                                    "telefono",
+                                    "fecha",
+                                    "hora_inicio",
+                                    "hora_fin",
+                                    "cancha_id"
+                                ],
+                                "properties": {
+                                    "cliente": {
+                                        "type": "string",
+                                        "example": "usuario"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "1544327689"
+                                    },
+                                    "fecha": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "hora_inicio": {
+                                        "type": "string",
+                                        "example": "16:00"
+                                    },
+                                    "hora_fin": {
+                                        "type": "string",
+                                        "example": "17:00"
+                                    },
+                                    "cancha_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "example": "pendiente"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Reserva creada correctamente"
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado"
+                    },
+                    "409": {
+                        "description": "Conflicto de horario"
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "hora_inicio": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "hora_fin": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservas/{reserva}": {
+            "put": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Actualizar una reserva (Solo ADMIN)",
+                "operationId": "5e205f5f1e4090f29a0e88a2e525a9b6",
+                "parameters": [
+                    {
+                        "name": "reserva",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "cliente": {
+                                        "type": "string",
+                                        "example": "usuario"
+                                    },
+                                    "telefono": {
+                                        "type": "string",
+                                        "example": "1544327689"
+                                    },
+                                    "fecha": {
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "hora_inicio": {
+                                        "type": "string",
+                                        "example": "16:00"
+                                    },
+                                    "hora_fin": {
+                                        "type": "string",
+                                        "example": "17:00"
+                                    },
+                                    "cancha_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "estado": {
+                                        "type": "string",
+                                        "example": "pendiente"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reserva actualizada correctamente"
+                    },
+                    "403": {
+                        "description": "Acceso denegado. Solo administradores"
+                    },
+                    "404": {
+                        "description": "Reserva no encontrada"
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "hora_inicio": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "hora_fin": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Eliminar una reserva (Solo ADMIN)",
+                "operationId": "4c6d5a08bc012744b5d042940a2d5bea",
+                "parameters": [
+                    {
+                        "name": "reserva",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reserva eliminada correctamente"
+                    },
+                    "403": {
+                        "description": "Acceso denegado. Solo administradores"
+                    },
+                    "404": {
+                        "description": "Reserva no encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/horarios": {
+            "get": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Obtener horarios disponibles",
+                "operationId": "8bc4531aae97c1ed5d69ae2660c697c2",
+                "parameters": [
+                    {
+                        "name": "fecha",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "canchaId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de horarios disponibles"
+                    },
+                    "400": {
+                        "description": "Fecha y cancha son requeridas"
+                    }
+                }
+            }
+        },
+        "/api/reservas/metrics": {
+            "get": {
+                "tags": [
+                    "Estadísticas"
+                ],
+                "summary": "Obtener métricas de ocupación (Administrador)",
+                "description": "Obtener métricas de ocupación (Solo ADMIN)",
+                "operationId": "86768e3eac3e9b0fa3bf1cc0cf525e2a",
+                "responses": {
+                    "200": {
+                        "description": "Métricas de ocupación"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservas/activas": {
+            "get": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Obtener todas las reservas activas (Administrador)",
+                "description": "Obtener reservas activas (Solo ADMIN)",
+                "operationId": "72f638d3b480c812a5bd6f56e3eba0a2",
+                "responses": {
+                    "200": {
+                        "description": "Lista de reservas activas"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservations": {
+            "get": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Obtener reservas activas del usuario autenticado",
+                "description": "Obtener reservas activas por usuario (Usuario Autenticado)",
+                "operationId": "016686cc70085d7636f70c21c626fc4a",
+                "responses": {
+                    "200": {
+                        "description": "Reservas activas del usuario"
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservas/pendientes": {
+            "get": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Obtener reservas pendientes (Administrador)",
+                "description": "Obtener reservas pendientes (Solo ADMIN)",
+                "operationId": "ef3463be7d425eb516ffba1e90e3a6d4",
+                "responses": {
+                    "200": {
+                        "description": "Lista de reservas pendientes"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservas/canceladas": {
+            "get": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Obtener reservas canceladas (Solo ADMIN)",
+                "operationId": "bf5f6d314ebecdeb275e458fd50e9c41",
+                "responses": {
+                    "200": {
+                        "description": "Lista de reservas canceladas"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservas/{id}/estado": {
+            "put": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Actualizar estado de una reserva (Solo ADMIN)",
+                "operationId": "5131587a94d21f1cce5bdd31cebe9ed5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "estado"
+                                ],
+                                "properties": {
+                                    "estado": {
+                                        "type": "string",
+                                        "example": "aprobada"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Estado actualizado"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Admin)"
+                    },
+                    "404": {
+                        "description": "Reserva no encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/reservas/ingresos": {
+            "get": {
+                "tags": [
+                    "Estadísticas"
+                ],
+                "summary": "Obtener ingresos mensuales (Solo ADMIN)",
+                "operationId": "eb655730a2b6b8efb847887c68122ef9",
+                "responses": {
+                    "200": {
+                        "description": "Ingresos mensuales calculados"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Admin)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/disponibilidad-mes": {
+            "get": {
+                "tags": [
+                    "Reservas"
+                ],
+                "summary": "Obtener disponibilidad por día para todo el mes",
+                "operationId": "8484dbf21d74d423e42ca888b1934592",
+                "parameters": [
+                    {
+                        "name": "mes",
+                        "in": "query",
+                        "description": "Formato YYYY-MM",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "canchaId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Estados de disponibilidad por día (libre, parcial, ocupado)"
+                    },
+                    "400": {
+                        "description": "Mes y cancha son requeridos"
+                    }
+                }
+            }
+        },
+        "/api/users/{id}": {
+            "put": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Actualizar un usuario existente (Solo Administrador)",
+                "operationId": "b9091397c8b25f12c6adb74be6ce3a5a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "telefono": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "administrador"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado correctamente"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Administrador)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Eliminar un usuario (Solo Administrador)",
+                "operationId": "fa56cffde745d3f152f95cbacd936c0b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario eliminado correctamente"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Administrador)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/usuarios-registrados": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Obtener lista de usuarios registrados (Solo Administrador)",
+                "operationId": "8bff2980165735f8f8aebb1f4e1d0792",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios"
+                    },
+                    "403": {
+                        "description": "Acceso denegado (Requiere Administrador)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Usa un token JWT para autenticar",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticación",
+            "description": "Autenticación"
+        },
+        {
+            "name": "Canchas",
+            "description": "Canchas"
+        },
+        {
+            "name": "Reservas",
+            "description": "Reservas"
+        },
+        {
+            "name": "Estadísticas",
+            "description": "Estadísticas"
+        },
+        {
+            "name": "Usuarios",
+            "description": "Usuarios"
+        }
+    ]
+}

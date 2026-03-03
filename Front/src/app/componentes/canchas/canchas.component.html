@@ -1,0 +1,140 @@
+<div class="container mt-4">
+  <h2 class="mb-3">Gestión de Canchas</h2>
+<div *ngIf="mensaje" class="alert alert-success text-center">
+  {{ mensaje }}
+</div>
+
+  <!-- Mensaje de carga o error -->
+  <div *ngIf="cargando">Cargando canchas...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <!-- Botón para crear nueva cancha -->
+  <button
+    *ngIf="isAdmin || isMaster"
+    class="btn btn-primary mb-3"
+    (click)="mostrarFormularioCrear()"
+  >
+    Crear Cancha
+  </button>
+
+  <!-- Formulario Crear/Editar -->
+  <div *ngIf="mostrarForm" class="card p-3 mb-4">
+    <h4>{{ editando ? "Editar Cancha" : "Crear Cancha" }}</h4>
+    <form [formGroup]="formCancha" (ngSubmit)="guardarCancha()">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label" for="nombre">Nombre</label>
+          <input
+            id="nombre"
+            type="text"
+            class="form-control"
+            formControlName="nombre"
+            placeholder="Ej: Cancha 1"
+          />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label" for="tipo">Tipo</label>
+          <input
+            id="tipo"
+            type="text"
+            class="form-control"
+            formControlName="tipo"
+            placeholder="Ej: Césped sintético"
+          />
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label" for="precio_hora">Precio por hora</label>
+          <input
+            id="precio_hora"
+            type="number"
+            class="form-control"
+            formControlName="precio_hora"
+            placeholder="Ej: 1500"
+          />
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label" for="cant_jugadores"
+            >Cantidad jugadores</label
+          >
+          <input
+            id="cant_jugadores"
+            type="number"
+            class="form-control"
+            formControlName="cant_jugadores"
+            placeholder="Ej: 10"
+          />
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+          <button
+            type="submit"
+            class="btn btn-success w-100"
+            [disabled]="formCancha.invalid"
+          >
+            {{ editando ? "Actualizar" : "Crear" }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de canchas -->
+  <table
+    class="table table-bordered table-striped"
+    *ngIf="!cargando && canchas.length > 0"
+  >
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Precio por hora</th>
+        <th>Cantidad jugadores</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cancha of canchas">
+        <td data-label="Nombre">{{ cancha.nombre }}</td>
+        <td data-label="Tipo">{{ cancha.tipo }}</td>
+        <td data-label="Precio por hora">{{ cancha.precio_hora || "-" }}</td>
+        <td data-label="Cantidad jugadores">
+          {{ cancha.cant_jugadores || "-" }}
+        </td>
+        <td data-label="Acciones">
+          <div class="d-flex gap-2">
+            <!-- Solo Admin o Master pueden editar/eliminar -->
+            <button
+              *ngIf="isAdmin || isMaster"
+              class="btn btn-warning btn-sm"
+              (click)="mostrarFormularioEditar(cancha)"
+            >
+              Editar
+            </button>
+            <button
+              *ngIf="isAdmin || isMaster"
+              class="btn btn-danger btn-sm"
+              (click)="eliminarCancha(cancha.id)"
+            >
+              Eliminar
+            </button>
+
+            <button
+              *ngIf="isUser"
+              class="btn btn-primary btn-sm"
+              (click)="irAReservas(cancha.id)"
+            >
+              Reservar
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && canchas.length === 0" class="alert alert-info">
+    No hay canchas disponibles.
+  </div>
+</div>

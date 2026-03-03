@@ -1,0 +1,103 @@
+/* Contenedor principal */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #28a745; /* Verde */
+  padding: 0.5rem 1rem;
+  color: white;
+}
+
+.navbar .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar .navbar-links button {
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.navbar .navbar-links .login {
+  background-color: #218838; /* Verde más oscuro */
+}
+
+.navbar .navbar-links .register {
+  background-color: #1e7e34; /* Verde aún más oscuro */
+}
+.navbar .navbar-links .logout {
+  background-color: #218838; /* Verde más oscuro */
+}
+
+.navbar .navbar-links .profile {
+  background-color: #1e7e34; /* Verde aún más oscuro */
+}
+
+/* Main: sidebar + content */
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #0d1b2a; /* Azul oscuro */
+  color: white;
+  padding: 1rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 1rem;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sidebar ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 1rem;
+  background-color: #f1f1f1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .navbar .navbar-links {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+}

@@ -1,0 +1,263 @@
+<div class="container mt-4">
+  <div *ngIf="mensaje" class="alert alert-success text-center">
+    {{ mensaje }}
+  </div>
+
+  <h2 class="mb-3 text-center">Gestión de Reservas</h2>
+
+  <!-- 🟢 Formulario siempre visible (sin botón de agregar) -->
+  <div *ngIf="(!esAdmin && !esMaster) || ((esAdmin || esMaster) && mostrarFormulario)"
+  class="card p-3 mb-4 shadow-sm">
+    <form [formGroup]="reservaForm" (ngSubmit)="confirmarReserva()">
+      <div class="row g-3">
+        <!-- Si es usuario: campo "cliente" readonly -->
+        <div class="col-md-4" *ngIf="!esAdmin && !esMaster">
+          <label class="form-label" for="cliente">Cliente</label>
+          <input
+            id="cliente"
+            type="text"
+            class="form-control"
+            name="cliente"
+            formControlName="cliente"
+            readonly
+          />
+        </div>
+
+        <!-- Si es admin/master: select de cliente -->
+        <div class="col-md-4" *ngIf="esAdmin || esMaster">
+          <label class="form-label" for="cliente_id">Cliente</label>
+          <select
+            id="cliente_id"
+            formControlName="cliente_id"
+            class="form-select"
+          >
+            <option value="">-- Seleccione cliente --</option>
+            <option
+              *ngFor="let cliente of usuariosClientes"
+              [value]="cliente.id"
+            >
+              {{ cliente.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="telefono">Teléfono</label>
+          <input
+            id="telefono"
+            type="text"
+            class="form-control"
+            formControlName="telefono"
+            [readonly]="!esAdmin && !esMaster"
+          />
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="cancha_id">Cancha</label>
+          <select
+            id="cancha_id"
+            formControlName="cancha_id"
+            class="form-select"
+          >
+            <option value="">-- Seleccione cancha --</option>
+            <option *ngFor="let cancha of canchas" [value]="cancha.id">
+              {{ cancha.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-md-6 text-center">
+          <label class="form-label" for="fecha">Seleccionar Fecha</label><br>
+          <span>
+            <span class="leyenda-box libre"></span> Disponible
+          </span>
+          <span>
+            <span class="leyenda-box ocupado"></span> Ocupado
+          </span>
+          <span>
+            <span class="leyenda-box parcial"></span> Horarios parciales
+          </span>
+          <div class="calendar-container border rounded shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                type="button"
+                (click)="cambiarMes(-1)"
+              >
+                ←
+              </button>
+              <h5 class="m-0">{{ mesActualNombre }} {{ anioActual }}</h5>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                type="button"
+                (click)="cambiarMes(1)"
+              >
+                →
+              </button>
+            </div>
+
+            <div class="calendar-grid">
+              <div class="calendar-day header" *ngFor="let d of diasSemana">
+                {{ d }}
+              </div>
+              <div
+                class="calendar-day"
+                *ngFor="let dia of diasDelMes"
+                [ngClass]="{
+                  libre: dia.estado === 'libre',
+                  ocupado: dia.estado === 'ocupado',
+                  parcial: dia.estado === 'parcial',
+                  disabled: dia.estado === 'vacío' || !dia.fecha,
+                  seleccionado:
+                    dia.fecha &&
+                    diaSeleccionado === dia.fecha.toISOString().split('T')[0]
+                }"
+                (click)="seleccionarDia(dia)"
+              >
+                {{ dia.numero || "" }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label" for="hora_inicio">Hora inicio</label>
+              <select
+                id="hora_inicio"
+                formControlName="hora_inicio"
+                class="form-select"
+              >
+                <option value="">-- Seleccione hora --</option>
+                <option
+                  *ngFor="let hora of horarios"
+                  [value]="hora"
+                  [disabled]="horariosOcupados.includes(hora)"
+                >
+                  {{ hora }}
+                  <span *ngIf="horariosOcupados.includes(hora)">
+                    (Ocupado)
+                  </span>
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label" for="hora_fin">Hora fin</label>
+              <select
+                id="hora_fin"
+                formControlName="hora_fin"
+                class="form-select"
+              >
+                <option value="">-- Seleccione hora --</option>
+                <option
+                  *ngFor="let hora of horariosFin"
+                  [value]="hora"
+                  [disabled]="horariosOcupados.includes(hora)"
+                >
+                  {{ hora }}
+                  <span *ngIf="horariosOcupados.includes(hora)">
+                    (Ocupado)
+                  </span>
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-12" *ngIf="esAdmin || esMaster">
+              <label class="form-label" for="estado">Estado</label>
+              <select id="estado" formControlName="estado" class="form-select">
+                <option value="activa">Activa</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="cancelada">Cancelada</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 text-center mt-3">
+          <button
+            type="submit"
+            class="btn btn-success me-2"
+            [disabled]="reservaForm.invalid || enviando"
+          >
+            {{ editandoReserva ? 'Actualizar Reserva' : 'Confirmar Reserva' }}
+          </button>
+
+          <button
+            type="button"
+            *ngIf="esAdmin || esMaster && mostrarFormulario"
+            class="btn btn-secondary ms-2"
+            (click)="cancelarEdicion()"
+          >
+            Cancelar
+          </button>
+
+          <div
+            *ngIf="enviando"
+            class="spinner-border text-success"
+            role="status"
+          ></div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- 🧾 Tabla solo visible para admin/master -->
+  <table
+    class="table table-bordered table-striped"
+    *ngIf="reservasActivas.length > 0 && (esAdmin || esMaster)"
+  >
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Teléfono</th>
+        <th>Cancha</th>
+        <th>Fecha</th>
+        <th>Hora Inicio</th>
+        <th>Hora Fin</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reserva of reservasActivas">
+        <td>{{ reserva.cliente }}</td>
+        <td>{{ reserva.telefono }}</td>
+        <td>{{ reserva.cancha || "-" }}</td>
+        <td>{{ reserva.fecha | date : "dd/MM/yyyy" }}</td>
+        <td>{{ reserva.hora_inicio }}</td>
+        <td>{{ reserva.hora_fin }}</td>
+        <td>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-success':
+                reserva.estado === 'activa' || reserva.estado === 'aprobada',
+              'bg-warning text-dark': reserva.estado === 'pendiente',
+              'bg-danger': reserva.estado === 'cancelada'
+            }"
+          >
+            {{ reserva.estado }}
+          </span>
+        </td>
+        <td>
+        <button class="btn btn-sm btn-warning me-1"
+          (click)="iniciarEdicion(reserva)">
+          Editar
+        </button>
+        <button class="btn btn-sm btn-danger"
+          (click)="eliminarReserva(reserva.id)">
+          Eliminar
+        </button>
+      </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="reservasActivas.length === 0 && (esAdmin || esMaster)" class="alert alert-info text-center">
+  No hay reservas activas en este momento.
+</div>
+
+</div>

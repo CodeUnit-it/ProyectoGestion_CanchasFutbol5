@@ -1,0 +1,58 @@
+.usuarios-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+   overflow-y: auto;
+  height: 100%;
+  
+}
+
+.tabla-usuarios {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.tabla-usuarios th, .tabla-usuarios td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.admin {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.usuario {
+  color: #555;
+}
+
+.cargando, .error, .vacio {
+  margin: 15px 0;
+  font-size: 15px;
+  text-align: center;
+}
+
+.btn-cerrar {
+  margin-top: 20px;
+  align-items: center;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+td > div {
+  display: flex;
+  gap: 0.2rem; /* espacio entre botones */
+}
+
+.btn-sm {
+  flex-shrink: 0; /* evita que los botones se achiquen */
+}

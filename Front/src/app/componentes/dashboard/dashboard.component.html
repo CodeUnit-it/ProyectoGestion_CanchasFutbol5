@@ -1,0 +1,228 @@
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+/>
+
+<div class="dashboard-container container mt-4">
+  <h2 class="mb-4 text-center">📊 Panel de Administración</h2>
+
+  <div *ngIf="loading">⏳ Cargando métricas...</div>
+  <div *ngIf="error">❌ Error al cargar métricas</div>
+
+  <div *ngIf="!loading && !error">
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div
+          class="card text-white bg-primary h-100"
+          (click)="mostrarDetalle('usuariosRegistrados')"
+          style="cursor: pointer"
+        >
+          <div class="card-body">
+            <h5 class="card-title">Usuarios registrados</h5>
+            <p class="card-text fs-4">{{ usuariosRegistradosList.length }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div
+          class="card text-white bg-success h-100"
+          (click)="mostrarDetalle('ocupacion')"
+          style="cursor: pointer"
+        >
+          <div class="card-body">
+            <h5 class="card-title">Ocupación actual</h5>
+            <p class="card-text fs-4">
+              {{ ocupacion !== null ? ocupacion + "%" : "--%" }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div
+          class="card text-white bg-dark h-100"
+          (click)="mostrarDetalle('ingresosMensuales')"
+          style="cursor: pointer"
+        >
+          <div class="card-body">
+            <h5 class="card-title">Ingresos mensuales</h5>
+            <p class="card-text fs-4">${{ ingresosMensuales }}</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-4">
+        <div
+          class="card text-white bg-info h-100"
+          (click)="mostrarDetalle('reservasActivas')"
+          style="cursor: pointer"
+        >
+          <div class="card-body">
+            <h5 class="card-title">Reservas activas</h5>
+            <p class="card-text fs-4">{{ reservasActivas }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div
+          class="card text-dark bg-warning h-100"
+          (click)="mostrarDetalle('reservasPendientes')"
+          style="cursor: pointer"
+        >
+          <div class="card-body">
+            <h5 class="card-title">Reservas pendientes</h5>
+            <p class="card-text fs-4">{{ reservasPendientesList.length }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+  <div
+    class="card text-white bg-danger h-100"
+    (click)="mostrarDetalle('reservasCanceladas')"
+    style="cursor: pointer"
+  >
+    <div class="card-body">
+      <h5 class="card-title">Reservas canceladas</h5>
+      <p class="card-text fs-4">{{ reservasCanceladasList.length }}</p>
+    </div>
+  </div>
+</div>
+
+
+    </div>
+   
+
+          <div *ngIf="selectedCard === 'ocupacion'" class="fade-in">
+  <h3>Nivel de Ocupación</h3>
+          <div class="progress-bar bg-success w-100 mb-3" style="height: 30px;"[style.width.%]="ocupacion">
+    <span class="ms-3">{{ ocupacion }}%</span>
+  </div>
+  <p class="lead mt-2">
+    La ocupación representa el porcentaje de canchas reservadas en este momento.
+  </p>
+</div>
+
+
+    <div *ngIf="selectedCard === 'usuariosRegistrados'" class="fade-in">
+      <h3>👥 Usuarios Registrados</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Fecha de registro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuariosRegistradosList">
+            <td>{{ usuario.name }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.created_at | date : "short" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="selectedCard === 'reservasActivas'" class="fade-in">
+      <h3>📅 Reservas Activas</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Cancha</th>
+            <th>Horario</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reserva of reservasActivasList">
+            <td>{{ reserva.cliente }}</td>
+            <td>{{ reserva.cancha }}</td>
+            <td>{{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</td>
+            <td>{{ reserva.fecha}}</td>
+            <td>
+              <span class="badge bg-success">{{ reserva.estado }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="selectedCard === 'reservasPendientes'" class="fade-in">
+      <h3>📌 Reservas Pendientes</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Cancha</th>
+            <th>Horario</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reserva of reservasPendientesList">
+            <td>{{ reserva.cliente }}</td>
+            <td>{{ reserva.cancha }}</td>
+            <td>{{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</td>
+            <td>{{ reserva.fecha }}</td>
+            <td>
+              <span class="badge bg-warning text-dark">{{
+                reserva.estado
+              }}</span>
+            </td>
+            <td>
+  <div class="d-flex justify-content-center gap-2">
+    <button class="btn btn-success btn-sm fw-bold" (click)="aprobarReserva(reserva.id)">
+      Aprobar
+    </button>
+    <button class="btn btn-danger btn-sm fw-bold" (click)="rechazarReserva(reserva.id)">
+      Rechazar
+    </button>
+  </div>
+</td>
+
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="selectedCard === 'reservasCanceladas'" class="fade-in">
+  <h3>❌ Reservas Canceladas</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Cliente</th>
+        <th>Cancha</th>
+        <th>Horario</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reserva of reservasCanceladasList">
+        <td>{{ reserva.cliente }}</td>
+        <td>{{ reserva.cancha }}</td>
+        <td>{{ reserva.hora_inicio }} - {{ reserva.hora_fin }}</td>
+        <td>{{ reserva.fecha }}</td>
+        <td><span class="badge bg-danger">{{ reserva.estado }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    <div *ngIf="selectedCard === 'ingresosMensuales'">
+      <h3>💰 Detalle de Ingresos</h3>
+      <p>
+        Total generado este mes: <strong>${{ ingresosMensuales }}</strong>
+      </p>
+    </div>
+  </div>
+</div>
