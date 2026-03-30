@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
+import { environment } from '../../enviroments/enviroment'; // 1. IMPORTAR
 @Injectable({
   providedIn: 'root',
 })
@@ -12,7 +12,8 @@ export class ReservaService {
       params: { mes, canchaId },
     });
   }
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  // private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = environment.apiUrl; // 2. USAR VARIABLE
   private tokenKey = 'access_token';
 
   constructor(private http: HttpClient) {}

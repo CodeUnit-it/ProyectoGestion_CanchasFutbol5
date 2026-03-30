@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../enviroments/enviroment'; // 1. IMPORTAR
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  // private apiUrl = 'http://127.0.0.1:8000/api';
+private apiUrl = environment.apiUrl;
   private loggedIn = new BehaviorSubject<boolean>(!!this.getToken());
   loggedIn$ = this.loggedIn.asObservable();
 
@@ -66,12 +68,10 @@ export class AuthService {
 }
 
 actualizarTelefono(id: number, telefono: string): Observable<any> {
-  const token = this.getToken();
-  const headers = new HttpHeaders({
-    'Authorization': `Bearer ${token}`
-  });
-
-  return this.http.put(`${this.apiUrl}/usuarios/${id}`, { telefono }, { headers });
-}
+    const token = this.getToken();
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    // CAMBIO: Usar this.apiUrl (que ya viene de environment)
+    return this.http.put(`${this.apiUrl}/usuarios/${id}`, { telefono }, { headers });
+  }
 
 }

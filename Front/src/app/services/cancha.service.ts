@@ -2,6 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../enviroments/enviroment'; // 1. IMPORTAR
+
 
 export interface Cancha {
   id?: number;
@@ -15,7 +17,8 @@ export interface Cancha {
   providedIn: 'root',
 })
 export class CanchasService {
-  private apiUrl = 'http://127.0.0.1:8000/api/canchas2';
+  // private apiUrl = 'http://127.0.0.1:8000/api/canchas2';
+  private apiUrl = `${environment.apiUrl}/canchas2`;
   private tokenKey = 'access_token';
 
   constructor(private http: HttpClient) {}
