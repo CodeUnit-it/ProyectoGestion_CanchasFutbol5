@@ -28,6 +28,7 @@
               "src/assets",
               "src/favicon.ico"
             ],
+
             "styles": [
               "src/styles.css"
             ],
@@ -35,12 +36,6 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -90,13 +85,12 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              "src/assets",
-              "src/favicon.ico"
+              }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
+              
             ],
             "scripts": []
           }
